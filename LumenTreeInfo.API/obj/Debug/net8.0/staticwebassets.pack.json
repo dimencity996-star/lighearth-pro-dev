@@ -1,0 +1,189 @@
+{
+  "Files": [
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/obj/Debug/net8.0/scopedcss/projectbundle/LumenTreeInfo.API.bundle.scp.css",
+      "PackagePath": "staticwebassets/LumenTreeInfo.API.bundle.scp.css"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/android-chrome-192x192.png",
+      "PackagePath": "staticwebassets/android-chrome-192x192.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/android-chrome-512x512.png",
+      "PackagePath": "staticwebassets/android-chrome-512x512.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/apple-touch-icon.png",
+      "PackagePath": "staticwebassets/apple-touch-icon.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/calculator.html",
+      "PackagePath": "staticwebassets/calculator.html"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/css/index.css",
+      "PackagePath": "staticwebassets/css/index.css"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/favicon-16x16.png",
+      "PackagePath": "staticwebassets/favicon-16x16.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/favicon-32x32.png",
+      "PackagePath": "staticwebassets/favicon-32x32.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/favicon.ico",
+      "PackagePath": "staticwebassets/favicon.ico"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/backup.png",
+      "PackagePath": "staticwebassets/icons/backup.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/evn-grid-mobile.png",
+      "PackagePath": "staticwebassets/icons/evn-grid-mobile.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/evn-grid.png",
+      "PackagePath": "staticwebassets/icons/evn-grid.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/grid-export-mobile.png",
+      "PackagePath": "staticwebassets/icons/grid-export-mobile.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/grid-export.png",
+      "PackagePath": "staticwebassets/icons/grid-export.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/inverter.png",
+      "PackagePath": "staticwebassets/icons/inverter.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/lightning-bolt-small.png",
+      "PackagePath": "staticwebassets/icons/lightning-bolt-small.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/lightning-bolt.png",
+      "PackagePath": "staticwebassets/icons/lightning-bolt.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/load.png",
+      "PackagePath": "staticwebassets/icons/load.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/solar-panel-mobile.png",
+      "PackagePath": "staticwebassets/icons/solar-panel-mobile.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/solar-panel-old.png",
+      "PackagePath": "staticwebassets/icons/solar-panel-old.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/solar-panel.png",
+      "PackagePath": "staticwebassets/icons/solar-panel.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/sun-mobile.png",
+      "PackagePath": "staticwebassets/icons/sun-mobile.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/sun.png",
+      "PackagePath": "staticwebassets/icons/sun.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/bat_green.png",
+      "PackagePath": "staticwebassets/images/icons/bat_green.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/bat_low.png",
+      "PackagePath": "staticwebassets/images/icons/bat_low.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/bat_medium.png",
+      "PackagePath": "staticwebassets/images/icons/bat_medium.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/device.png",
+      "PackagePath": "staticwebassets/images/icons/device.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/essential_load.png",
+      "PackagePath": "staticwebassets/images/icons/essential_load.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/grid.png",
+      "PackagePath": "staticwebassets/images/icons/grid.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/home_load.png",
+      "PackagePath": "staticwebassets/images/icons/home_load.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/icons/pv.png",
+      "PackagePath": "staticwebassets/images/icons/pv.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/solar-panel-3d-mobile.png",
+      "PackagePath": "staticwebassets/images/solar-panel-3d-mobile.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/images/solar-panel-3d.png",
+      "PackagePath": "staticwebassets/images/solar-panel-3d.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/js/index-sandbox-direct.js",
+      "PackagePath": "staticwebassets/js/index-sandbox-direct.js"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/js/index.js",
+      "PackagePath": "staticwebassets/js/index.js"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/logo.png",
+      "PackagePath": "staticwebassets/logo.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/manifest.json",
+      "PackagePath": "staticwebassets/manifest.json"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/service-worker.js",
+      "PackagePath": "staticwebassets/service-worker.js"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/site.webmanifest",
+      "PackagePath": "staticwebassets/site.webmanifest"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/telegram-logo.png",
+      "PackagePath": "staticwebassets/telegram-logo.png"
+    },
+    {
+      "Id": "/home/user/webapp/LumenTreeInfo.API/wwwroot/zalo-logo.png",
+      "PackagePath": "staticwebassets/zalo-logo.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.LumenTreeInfo.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.LumenTreeInfo.API.props",
+      "PackagePath": "build\\LumenTreeInfo.API.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.LumenTreeInfo.API.props",
+      "PackagePath": "buildMultiTargeting\\LumenTreeInfo.API.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.LumenTreeInfo.API.props",
+      "PackagePath": "buildTransitive\\LumenTreeInfo.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

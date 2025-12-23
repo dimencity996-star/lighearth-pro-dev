@@ -1,0 +1,13 @@
+/home/user/webapp/LumenTreeInfo.Lib/bin/Debug/net8.0/LumenTreeInfo.Lib.deps.json
+/home/user/webapp/LumenTreeInfo.Lib/bin/Debug/net8.0/LumenTreeInfo.Lib.dll
+/home/user/webapp/LumenTreeInfo.Lib/bin/Debug/net8.0/LumenTreeInfo.Lib.pdb
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.csproj.AssemblyReference.cache
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.GeneratedMSBuildEditorConfig.editorconfig
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.AssemblyInfoInputs.cache
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.AssemblyInfo.cs
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.csproj.CoreCompileInputs.cache
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.sourcelink.json
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.dll
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/refint/LumenTreeInfo.Lib.dll
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/LumenTreeInfo.Lib.pdb
+/home/user/webapp/LumenTreeInfo.Lib/obj/Debug/net8.0/ref/LumenTreeInfo.Lib.dll

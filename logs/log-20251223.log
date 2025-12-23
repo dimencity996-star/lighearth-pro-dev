@@ -1,0 +1,191 @@
+2025-12-23 15:25:35.179 +00:00 [INF] Serilog configured with log path: /home/user/webapp/logs/log-.log
+2025-12-23 15:25:35.469 +00:00 [INF] Application starting up
+2025-12-23 15:25:35.488 +00:00 [INF] User profile is available. Using '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-23 15:25:35.492 +00:00 [INF] DataSourceManager config: DeviceSN=P250801055, HA_Enabled=True, HA_URL=http://localhost:8123
+2025-12-23 15:25:35.493 +00:00 [INF] Added device: P250801055
+2025-12-23 15:25:35.507 +00:00 [INF] HomeAssistantClient initialized for http://localhost:8123
+2025-12-23 15:25:35.507 +00:00 [INF] DataSourceManager initialized with HA as PRIMARY: http://localhost:8123
+2025-12-23 15:25:35.511 +00:00 [INF] Telegram Config: Token=0chars, ChatId=, Enabled=false
+2025-12-23 15:25:35.513 +00:00 [WRN] Telegram notifications disabled - check TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars
+2025-12-23 15:25:35.528 +00:00 [INF] Creating key {8db9addc-b9dc-4d58-837c-66826e0ee9c4} with creation date 2025-12-23 15:25:35Z, activation date 2025-12-23 15:25:35Z, and expiration date 2026-03-23 15:25:35Z.
+2025-12-23 15:25:35.539 +00:00 [WRN] No XML encryptor configured. Key {8db9addc-b9dc-4d58-837c-66826e0ee9c4} may be persisted to storage in unencrypted form.
+2025-12-23 15:25:35.542 +00:00 [INF] Writing data to file '/home/user/.aspnet/DataProtection-Keys/key-8db9addc-b9dc-4d58-837c-66826e0ee9c4.xml'.
+2025-12-23 15:25:35.551 +00:00 [INF] Solar Monitor Service starting
+2025-12-23 15:25:35.552 +00:00 [INF] DataSourceManagerHostedService starting...
+2025-12-23 15:25:35.554 +00:00 [INF] Starting DataSourceManager...
+2025-12-23 15:25:35.554 +00:00 [INF] Home Assistant is configured, trying as PRIMARY source...
+2025-12-23 15:25:35.558 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:25:35.683 +00:00 [WRN] Home Assistant API check failed: 0
+2025-12-23 15:25:35.683 +00:00 [WRN] Home Assistant not available, will try MQTT as fallback
+2025-12-23 15:25:35.683 +00:00 [INF] Trying MQTT connection...
+2025-12-23 15:25:35.683 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:25:45.610 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:25:45.619 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:25:45.630 +00:00 [INF] MQTT reconnect attempt 1/5 in 5s
+2025-12-23 15:25:45.611 +00:00 [ERR] Error connecting to MQTT broker in background
+System.OperationCanceledException: MQTT connect canceled.
+   at MQTTnet.Adapter.MqttChannelAdapter.ConnectAsync(CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.ConnectInternal(IMqttChannelAdapter channelAdapter, CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.ConnectAsync(MqttClientOptions options, CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.ConnectAsync(MqttClientOptions options, CancellationToken cancellationToken)
+   at LumenTreeInfo.Lib.SolarInverterMonitor.ConnectAsync() in /home/user/webapp/LumenTreeInfo.Lib/SolarInverterMonitor.cs:line 304
+   at LumenTreeInfo.API.SolarMonitorService.<StartAsync>b__9_0() in /home/user/webapp/LumenTreeInfo.API/DeviceHub.cs:line 51
+2025-12-23 15:25:45.683 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:25:45.683 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:25:45.683 +00:00 [INF] MQTT reconnect attempt 1/5 in 5s
+2025-12-23 15:25:45.684 +00:00 [WRN] MQTT connection failed (attempt 1): MQTT connect canceled.
+2025-12-23 15:25:45.684 +00:00 [ERR] No data source available - both HA and MQTT failed
+2025-12-23 15:25:45.690 +00:00 [INF] Starting health check task...
+2025-12-23 15:25:45.691 +00:00 [INF] DataSourceManagerHostedService started successfully
+2025-12-23 15:25:45.696 +00:00 [INF] PowerHistoryCollector started - collecting every 5 minutes
+2025-12-23 15:25:45.701 +00:00 [WRN] TelegramNotificationService disabled - no configuration
+2025-12-23 15:25:45.704 +00:00 [WRN] TelegramBotCommandService disabled - no configuration
+2025-12-23 15:25:45.799 +00:00 [INF] Now listening on: http://0.0.0.0:8080
+2025-12-23 15:25:45.800 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-23 15:25:45.801 +00:00 [INF] Hosting environment: Development
+2025-12-23 15:25:45.801 +00:00 [INF] Content root path: /home/user/webapp/LumenTreeInfo.API
+2025-12-23 15:25:50.626 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:25:50.681 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:26:00.628 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:26:00.629 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:26:00.629 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:26:00.629 +00:00 [INF] MQTT reconnect attempt 2/5 in 10s
+2025-12-23 15:26:00.685 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:26:00.685 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:26:00.686 +00:00 [INF] MQTT reconnect attempt 2/5 in 10s
+2025-12-23 15:26:00.687 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:26:10.628 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:26:10.684 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:26:15.702 +00:00 [INF] MultiDeviceHomeAssistantClient configured for http://localhost:8123
+2025-12-23 15:26:15.704 +00:00 [INF] MultiDeviceHomeAssistantClient initialized for http://localhost:8123
+2025-12-23 15:26:20.631 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:26:20.631 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:26:20.631 +00:00 [INF] MQTT reconnect attempt 3/5 in 20s
+2025-12-23 15:26:20.632 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:26:20.687 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:26:20.686 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:26:20.687 +00:00 [INF] MQTT reconnect attempt 3/5 in 20s
+2025-12-23 15:26:20.687 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:26:40.634 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:26:40.685 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:26:50.633 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:26:50.634 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:26:50.634 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:26:50.634 +00:00 [INF] MQTT reconnect attempt 4/5 in 40s
+2025-12-23 15:26:50.686 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:26:50.686 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:26:50.686 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:26:50.686 +00:00 [INF] MQTT reconnect attempt 4/5 in 40s
+2025-12-23 15:26:52.484 +00:00 [INF] Application is shutting down...
+2025-12-23 15:26:52.497 +00:00 [INF] DataSourceManagerHostedService stopping...
+2025-12-23 15:26:52.499 +00:00 [INF] Stopping DataSourceManager...
+2025-12-23 15:26:52.500 +00:00 [INF] DataSourceManagerHostedService stopped
+2025-12-23 15:26:52.501 +00:00 [INF] Solar Monitor Service stopping
+2025-12-23 15:27:14.752 +00:00 [INF] Serilog configured with log path: /home/user/webapp/logs/log-.log
+2025-12-23 15:27:15.038 +00:00 [INF] Application starting up
+2025-12-23 15:27:15.056 +00:00 [INF] User profile is available. Using '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-23 15:27:15.060 +00:00 [INF] DataSourceManager config: DeviceSN=P250801055, HA_Enabled=True, HA_URL=http://localhost:8123
+2025-12-23 15:27:15.061 +00:00 [INF] Added device: P250801055
+2025-12-23 15:27:15.077 +00:00 [INF] HomeAssistantClient initialized for http://localhost:8123
+2025-12-23 15:27:15.077 +00:00 [INF] DataSourceManager initialized with HA as PRIMARY: http://localhost:8123
+2025-12-23 15:27:15.086 +00:00 [INF] Telegram Config: Token=0chars, ChatId=, Enabled=false
+2025-12-23 15:27:15.088 +00:00 [WRN] Telegram notifications disabled - check TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars
+2025-12-23 15:27:15.118 +00:00 [INF] Solar Monitor Service starting
+2025-12-23 15:27:15.123 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:27:15.126 +00:00 [INF] DataSourceManagerHostedService starting...
+2025-12-23 15:27:15.127 +00:00 [INF] Starting DataSourceManager...
+2025-12-23 15:27:15.127 +00:00 [INF] Home Assistant is configured, trying as PRIMARY source...
+2025-12-23 15:27:15.210 +00:00 [WRN] Home Assistant API check failed: 0
+2025-12-23 15:27:15.210 +00:00 [WRN] Home Assistant not available, will try MQTT as fallback
+2025-12-23 15:27:15.210 +00:00 [INF] Trying MQTT connection...
+2025-12-23 15:27:15.210 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:27:25.150 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:27:25.157 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:27:25.166 +00:00 [INF] MQTT reconnect attempt 1/5 in 5s
+2025-12-23 15:27:25.151 +00:00 [ERR] Error connecting to MQTT broker in background
+System.OperationCanceledException: MQTT connect canceled.
+   at MQTTnet.Adapter.MqttChannelAdapter.ConnectAsync(CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.ConnectInternal(IMqttChannelAdapter channelAdapter, CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.ConnectAsync(MqttClientOptions options, CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.ConnectAsync(MqttClientOptions options, CancellationToken cancellationToken)
+   at LumenTreeInfo.Lib.SolarInverterMonitor.ConnectAsync() in /home/user/webapp/LumenTreeInfo.Lib/SolarInverterMonitor.cs:line 304
+   at LumenTreeInfo.API.SolarMonitorService.<StartAsync>b__9_0() in /home/user/webapp/LumenTreeInfo.API/DeviceHub.cs:line 51
+2025-12-23 15:27:25.207 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:27:25.207 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:27:25.207 +00:00 [INF] MQTT reconnect attempt 1/5 in 5s
+2025-12-23 15:27:25.207 +00:00 [WRN] MQTT connection failed (attempt 1): MQTT connect canceled.
+2025-12-23 15:27:25.207 +00:00 [ERR] No data source available - both HA and MQTT failed
+2025-12-23 15:27:25.212 +00:00 [INF] Starting health check task...
+2025-12-23 15:27:25.212 +00:00 [INF] DataSourceManagerHostedService started successfully
+2025-12-23 15:27:25.217 +00:00 [INF] PowerHistoryCollector started - collecting every 5 minutes
+2025-12-23 15:27:25.223 +00:00 [WRN] TelegramNotificationService disabled - no configuration
+2025-12-23 15:27:25.226 +00:00 [WRN] TelegramBotCommandService disabled - no configuration
+2025-12-23 15:27:25.298 +00:00 [INF] Now listening on: http://0.0.0.0:3000
+2025-12-23 15:27:25.299 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-23 15:27:25.300 +00:00 [INF] Hosting environment: Development
+2025-12-23 15:27:25.300 +00:00 [INF] Content root path: /home/user/webapp/LumenTreeInfo.API
+2025-12-23 15:27:26.444 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:3000/ - null null
+2025-12-23 15:27:26.500 +00:00 [INF] Executing endpoint 'LumenTreeInfo.API.Controllers.HomeController.Index (LumenTreeInfo.API)'
+2025-12-23 15:27:26.515 +00:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller LumenTreeInfo.API.Controllers.HomeController (LumenTreeInfo.API).
+2025-12-23 15:27:26.533 +00:00 [INF] Rendering home page
+2025-12-23 15:27:26.545 +00:00 [INF] Executing ViewResult, running view Index.
+2025-12-23 15:27:26.635 +00:00 [INF] Executed ViewResult - view Index executed in 85.8651ms.
+2025-12-23 15:27:26.637 +00:00 [INF] Executed action LumenTreeInfo.API.Controllers.HomeController.Index (LumenTreeInfo.API) in 120.3702ms
+2025-12-23 15:27:26.637 +00:00 [INF] Executed endpoint 'LumenTreeInfo.API.Controllers.HomeController.Index (LumenTreeInfo.API)'
+2025-12-23 15:27:26.644 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:3000/ - 200 null text/html; charset=utf-8 204.177ms
+2025-12-23 15:27:30.163 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:27:30.209 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:27:40.163 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:27:40.163 +00:00 [INF] MQTT reconnect attempt 2/5 in 10s
+2025-12-23 15:27:40.163 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:27:40.164 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:27:40.206 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:27:40.206 +00:00 [INF] MQTT reconnect attempt 2/5 in 10s
+2025-12-23 15:27:40.206 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:27:40.207 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:27:50.161 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:27:50.206 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:27:55.223 +00:00 [INF] MultiDeviceHomeAssistantClient configured for http://localhost:8123
+2025-12-23 15:27:55.225 +00:00 [INF] MultiDeviceHomeAssistantClient initialized for http://localhost:8123
+2025-12-23 15:28:00.163 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:28:00.163 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:28:00.163 +00:00 [INF] MQTT reconnect attempt 3/5 in 20s
+2025-12-23 15:28:00.163 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:28:00.208 +00:00 [INF] Error connecting to MQTT broker: MQTT connect canceled.
+2025-12-23 15:28:00.208 +00:00 [INF] Disconnected from MQTT broker
+2025-12-23 15:28:00.208 +00:00 [INF] MQTT reconnect attempt 3/5 in 20s
+2025-12-23 15:28:00.208 +00:00 [WRN] MQTT reconnect failed: MQTT connect canceled.
+2025-12-23 15:28:19.042 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/ - null null
+2025-12-23 15:28:19.046 +00:00 [INF] Executing endpoint 'LumenTreeInfo.API.Controllers.HomeController.Index (LumenTreeInfo.API)'
+2025-12-23 15:28:19.046 +00:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller LumenTreeInfo.API.Controllers.HomeController (LumenTreeInfo.API).
+2025-12-23 15:28:19.047 +00:00 [INF] Rendering home page
+2025-12-23 15:28:19.048 +00:00 [INF] Executing ViewResult, running view Index.
+2025-12-23 15:28:19.086 +00:00 [INF] Executed ViewResult - view Index executed in 38.0048ms.
+2025-12-23 15:28:19.086 +00:00 [INF] Executed action LumenTreeInfo.API.Controllers.HomeController.Index (LumenTreeInfo.API) in 39.2365ms
+2025-12-23 15:28:19.086 +00:00 [INF] Executed endpoint 'LumenTreeInfo.API.Controllers.HomeController.Index (LumenTreeInfo.API)'
+2025-12-23 15:28:19.089 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/ - 200 null text/html; charset=utf-8 46.8921ms
+2025-12-23 15:28:19.354 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/css/index.css?v=20017 - null null
+2025-12-23 15:28:19.356 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/zalo-logo.png - null null
+2025-12-23 15:28:19.393 +00:00 [INF] Sending file. Request path: '/zalo-logo.png'. Physical path: '/home/user/webapp/LumenTreeInfo.API/wwwroot/zalo-logo.png'
+2025-12-23 15:28:19.393 +00:00 [INF] Sending file. Request path: '/css/index.css'. Physical path: '/home/user/webapp/LumenTreeInfo.API/wwwroot/css/index.css'
+2025-12-23 15:28:19.396 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/css/index.css?v=20017 - 200 null text/css 41.9249ms
+2025-12-23 15:28:19.396 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/zalo-logo.png - 200 20756 image/png 40.3448ms
+2025-12-23 15:28:19.398 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/logo.png - null null
+2025-12-23 15:28:19.400 +00:00 [INF] Sending file. Request path: '/logo.png'. Physical path: '/home/user/webapp/LumenTreeInfo.API/wwwroot/logo.png'
+2025-12-23 15:28:19.400 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/logo.png - 200 20717 image/png 2.1377ms
+2025-12-23 15:28:19.598 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/icons/solar-panel.png - null null
+2025-12-23 15:28:19.599 +00:00 [INF] Sending file. Request path: '/icons/solar-panel.png'. Physical path: '/home/user/webapp/LumenTreeInfo.API/wwwroot/icons/solar-panel.png'
+2025-12-23 15:28:19.599 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/icons/solar-panel.png - 200 38626 image/png 1.904ms
+2025-12-23 15:28:19.817 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/js/index.js?v=13146 - null null
+2025-12-23 15:28:19.823 +00:00 [INF] Sending file. Request path: '/js/index.js'. Physical path: '/home/user/webapp/LumenTreeInfo.API/wwwroot/js/index.js'
+2025-12-23 15:28:19.823 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/js/index.js?v=13146 - 200 null text/javascript 5.8722ms
+2025-12-23 15:28:20.164 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
+2025-12-23 15:28:20.169 +00:00 [INF] Request starting HTTP/1.1 POST http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/deviceHub/negotiate?negotiateVersion=1 - null 0
+2025-12-23 15:28:20.175 +00:00 [INF] CORS policy execution successful.
+2025-12-23 15:28:20.176 +00:00 [INF] Executing endpoint '/deviceHub/negotiate'
+2025-12-23 15:28:20.191 +00:00 [INF] Executed endpoint '/deviceHub/negotiate'
+2025-12-23 15:28:20.191 +00:00 [INF] Request finished HTTP/1.1 POST http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/deviceHub/negotiate?negotiateVersion=1 - 200 null application/json 22.7269ms
+2025-12-23 15:28:20.197 +00:00 [INF] Request starting HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/favicon-32x32.png - null null
+2025-12-23 15:28:20.197 +00:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: '/home/user/webapp/LumenTreeInfo.API/wwwroot/favicon-32x32.png'
+2025-12-23 15:28:20.198 +00:00 [INF] Request finished HTTP/1.1 GET http://3000-ih73l0r50fjlafb5kanmy-8f57ffe2.sandbox.novita.ai/favicon-32x32.png - 200 2021 image/png 1.1043ms
+2025-12-23 15:28:20.208 +00:00 [INF] Connecting to lesvr.suntcn.com:1886
