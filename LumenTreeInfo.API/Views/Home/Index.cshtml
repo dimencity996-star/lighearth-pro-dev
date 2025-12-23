@@ -1,0 +1,1428 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Giám Sát Năng Lượng Mặt Trời - LightEarth Web Pro</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/css/index.css?v=20017" as="style">
+    <link rel="preload" href="/logo.png" as="image">
+    
+    <!-- Tailwind CSS with custom config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <!-- PWA manifest disabled - use browser shortcut instead -->
+    <!-- <link rel="manifest" href="/site.webmanifest"> -->
+    
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-brand {
+            background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%);
+        }
+        
+        .gradient-dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+        
+        .shadow-brand {
+            box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #8b5cf6;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7c3aed;
+        }
+        
+        /* Connection status indicator */
+        .status-connected {
+            background-color: #10b981;
+            animation: pulse-green 2s infinite;
+        }
+        
+        .status-disconnected {
+            background-color: #ef4444;
+        }
+        
+        .status-connecting {
+            background-color: #8b5cf6;
+            animation: pulse-yellow 1s infinite;
+        }
+        
+        @@keyframes pulse-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @@keyframes pulse-yellow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        /* Sun Animation Styles */
+        .sun-animated {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: sun-pulse 3s ease-in-out infinite, sun-rotate 20s linear infinite;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .sun-icon {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+        }
+        
+        @@media (min-width: 640px) {
+            .sun-icon {
+                width: 36px;
+                height: 36px;
+            }
+            .sun-animated {
+                top: -12px;
+            }
+        }
+        
+        @@keyframes sun-pulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+                transform: translateX(-50%) scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 16px rgba(251, 191, 36, 1));
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+        
+        @@keyframes sun-rotate {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+        
+        .solar-panel-img img {
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
+        }
+        
+        .fab:active {
+            transform: scale(0.95);
+        }
+        
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            max-height: 800px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .dark .modal-content {
+            background: #1f2937;
+        }
+        
+        /* Header scroll hide/show */
+        #mainHeader.header-hidden {
+            transform: translateY(-100%);
+        }
+        
+        /* Default zoom 90% for all devices */
+        html {
+            zoom: 0.9;
+            -moz-transform: scale(0.9);
+            -moz-transform-origin: 0 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <!-- Header - Dark theme, Hide on scroll down, show on scroll up -->
+    <header b-iwpun16f09 id="mainHeader" class="bg-slate-900 border-b border-slate-700/50 shadow-xl sticky top-0 z-50 transition-transform duration-300">
+        <div b-iwpun16f09 class="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3">
+            <div b-iwpun16f09 class="flex items-center justify-between">
+                <!-- Logo + Brand -->
+                <div b-iwpun16f09 class="flex items-center gap-2 sm:gap-3">
+                    <div class="relative">
+                        <img b-iwpun16f09 src="/logo.png" alt="LightEarth" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl shadow-lg">
+                        <!-- Solar glow effect -->
+                        <div class="absolute -inset-1 bg-amber-500/20 rounded-xl blur-sm -z-10"></div>
+                    </div>
+                    <div b-iwpun16f09>
+                        <h1 b-iwpun16f09 class="text-base sm:text-lg font-bold">
+                            <span class="bg-gradient-to-r from-teal-400 via-emerald-400 to-indigo-400 bg-clip-text text-transparent">LightEarth</span>
+                            <span class="text-slate-300 font-medium ml-1">Web Pro</span>
+                        </h1>
+                        <p b-iwpun16f09 class="text-[10px] sm:text-xs text-slate-400 flex items-center gap-1">
+                            <svg class="w-3 h-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Giám Sát Năng Lượng Mặt Trời</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Right side -->
+                <div b-iwpun16f09 class="flex items-center gap-2 sm:gap-3">
+                    <!-- Connection Status -->
+                    <div b-iwpun16f09 class="flex items-center gap-1.5 sm:gap-2 bg-slate-800 border border-slate-700 rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5">
+                        <div b-iwpun16f09 id="connectionIndicator" class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full status-disconnected"></div>
+                        <span b-iwpun16f09 id="connectionText" class="text-[10px] sm:text-xs text-slate-300 font-medium">Đang kết nối...</span>
+                    </div>
+                    
+                    <!-- Calculator Button in Header -->
+                    <button b-iwpun16f09 onclick="openCalculatorModal()" 
+                            class="hidden sm:flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg transition-all shadow-lg shadow-emerald-900/30">
+                        <i b-iwpun16f09 data-lucide="calculator" class="w-4 h-4"></i>
+                        <span b-iwpun16f09 class="text-sm font-medium">Tính Tiết Kiệm</span>
+                    </button>
+                    
+                    <!-- Theme Toggle -->
+                    <button b-iwpun16f09 id="themeToggle" class="w-8 h-8 sm:w-9 sm:h-9 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg flex items-center justify-center transition-all">
+                        <i b-iwpun16f09 data-lucide="moon" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-300 dark:hidden"></i>
+                        <i b-iwpun16f09 data-lucide="sun" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Join Zalo Community Button - Centered -->
+    <div b-iwpun16f09 class="w-full flex justify-center py-3 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-900 border-b border-blue-200 dark:border-slate-700">
+        <a b-iwpun16f09 href="https://zalo.me/g/kmzrgh433" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#0068FF] hover:bg-[#0055DD] text-white rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95">
+            <img b-iwpun16f09 src="/zalo-logo.png" alt="Zalo" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg">
+            <span b-iwpun16f09 class="text-sm sm:text-base font-bold whitespace-nowrap">Join cộng đồng LightEarth Lumentree Việt Nam</span>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <main b-iwpun16f09 class="container mx-auto px-4 py-6">
+        
+<!-- Premium Hero Section - Landing Page -->
+<div id="heroSection" class="hero-landing min-h-[70vh] sm:min-h-[60vh] flex flex-col items-center justify-center relative overflow-hidden mb-6">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 hero-bg-gradient"></div>
+    <div class="absolute inset-0 hero-grid-pattern opacity-30"></div>
+    
+    <!-- Floating Elements -->
+    <div class="hero-float-element hero-float-1"></div>
+    <div class="hero-float-element hero-float-2"></div>
+    <div class="hero-float-element hero-float-3"></div>
+    
+    <!-- Main Content -->
+    <div class="relative z-10 text-center px-4 max-w-2xl mx-auto">
+        <!-- Logo Animation -->
+        <div class="hero-logo-container mb-6">
+            <div class="hero-logo-ring"></div>
+            <div class="hero-logo-ring hero-logo-ring-2"></div>
+            <img src="/logo.png" alt="LightEarth" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl shadow-2xl relative z-10 hero-logo-pulse">
+        </div>
+        
+        <!-- Title -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black mb-3 hero-title">
+            <span class="bg-gradient-to-r from-teal-400 via-emerald-400 to-indigo-400 bg-clip-text text-transparent">LightEarth</span>
+            <span class="text-white dark:text-white"> Monitor</span>
+        </h1>
+        
+        <!-- Subtitle -->
+        <p class="text-white/70 text-sm sm:text-base mb-8 font-light tracking-wide">
+            Real-time Solar Energy Monitoring System
+        </p>
+        
+        <!-- Premium Input Card -->
+        <div class="hero-input-card bg-white/10 dark:bg-slate-800/50 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-white/20 shadow-2xl">
+            <!-- Device ID Input -->
+            <div class="mb-5">
+                <label class="block text-white/60 text-xs font-medium mb-2 uppercase tracking-widest">Device ID</label>
+                <div class="relative">
+                    <input type="text" id="deviceId" placeholder="P250812032"
+                           class="w-full px-5 py-4 text-lg sm:text-xl font-semibold text-center bg-white/10 dark:bg-slate-900/50 border-2 border-white/20 rounded-xl focus:outline-none focus:border-cyan-400 focus:bg-white/20 text-white placeholder-white/30 transition-all duration-300 tracking-wider">
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                        <i data-lucide="cpu" class="w-5 h-5 text-white/40"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Date Selector -->
+            <div class="mb-6">
+                <label class="block text-white/60 text-xs font-medium mb-2 uppercase tracking-widest">Date</label>
+                <div class="flex items-center gap-2">
+                    <button id="prevDay" class="hero-date-btn">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </button>
+                    <input type="date" id="dateInput" 
+                           class="flex-grow px-4 py-3 text-center bg-white/10 dark:bg-slate-900/50 border-2 border-white/20 rounded-xl focus:outline-none focus:border-cyan-400 text-white font-medium transition-all duration-300">
+                    <button id="nextDay" class="hero-date-btn">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button id="viewBtn" class="hero-submit-btn group w-full py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg uppercase tracking-wider transition-all duration-300">
+                <span class="flex items-center justify-center gap-3">
+                    <span>Xem Dashboard</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </span>
+            </button>
+        </div>
+        
+        <!-- Stats Preview -->
+        <div class="flex items-center justify-center gap-6 sm:gap-10 mt-8 text-white/50 text-xs sm:text-sm">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+                <span>Real-time</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4 text-teal-400"></i>
+                <span>MQTT Connected</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i>
+                <span>Secure</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 hero-scroll-indicator hidden" id="scrollIndicator">
+        <div class="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1">
+            <div class="w-1.5 h-2.5 bg-white/50 rounded-full animate-bounce"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Compact Search Bar (shown after data loaded) - NOT sticky on mobile, sticky on PC via CSS -->
+<div id="compactSearch" class="hidden mb-3 bg-white dark:bg-slate-800 rounded-xl shadow-md p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
+    <!-- Mobile: 2 rows layout | PC: single row layout -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <!-- Row 1 (Mobile) / Left side (PC): Logo + Device Info + Change Device Button -->
+        <div class="flex items-center gap-2">
+            <img src="/logo.png" alt="LightEarth" class="w-8 h-8 rounded-lg shadow flex-shrink-0">
+            <div class="min-w-0 flex-1">
+                <div class="text-xs font-bold text-slate-800 dark:text-white truncate" id="deviceIdDisplay">--</div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400" id="dateDisplay">--</div>
+            </div>
+            <!-- Change Device Button - visible on both mobile and PC -->
+            <button id="changeDeviceBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 hover:bg-teal-200 dark:hover:bg-teal-800/50 transition-colors flex-shrink-0" title="Đổi thiết bị">
+                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                <span class="text-xs font-medium">Đổi ID</span>
+            </button>
+        </div>
+        
+        <!-- Row 2 (Mobile) / Right side (PC): Date Navigation + Calculate Button -->
+        <div class="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2">
+            <!-- Date Navigation Group -->
+            <div class="flex items-center gap-1">
+                <button id="prevDayCompact" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors" title="Ngày trước">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <!-- Date Display with Date Picker -->
+                <div class="relative">
+                    <button id="datePickerBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors" title="Chọn ngày">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-teal-500"></i>
+                        <span id="compactDateDisplay" class="text-xs font-semibold text-slate-700 dark:text-slate-200">--/--/----</span>
+                    </button>
+                    <input type="date" id="compactDateInput" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" title="Chọn ngày">
+                </div>
+                <button id="nextDayCompact" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors" title="Ngày sau">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Calculate Button -->
+            <a href="/calculator" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 text-xs font-semibold transition-colors flex-shrink-0" title="Tính Tiết Kiệm">
+                <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+                <span>Tính Tiết Kiệm</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Device Info Panel -->
+<div id="deviceInfo" class="hidden bg-white dark:bg-slate-800 rounded-xl shadow-md p-3 mb-4 border border-slate-200 dark:border-slate-700">
+    <div class="flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+        <div class="flex items-center gap-2">
+            <i data-lucide="cpu" class="w-4 h-4 text-teal-500"></i>
+            <span class="text-slate-500">ID:</span>
+            <span id="device-id" class="font-semibold text-slate-800 dark:text-white"></span>
+        </div>
+        <div class="flex items-center gap-2">
+            <i data-lucide="box" class="w-4 h-4 text-blue-500"></i>
+            <span class="text-slate-500">Loại:</span>
+            <span id="device-type" class="font-semibold"></span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span id="device-status" class="flex items-center gap-1"></span>
+        </div>
+        <div class="flex items-center gap-2" title="Nhiệt độ biến tần">
+            <i data-lucide="thermometer" class="w-4 h-4 text-red-500"></i>
+            <span class="text-xs text-slate-400 hidden sm:inline">Biến tần:</span>
+            <span id="device-temp-info" class="font-semibold">--</span>
+        </div>
+        <!-- Temperature Min/Max Badge -->
+        <div id="tempMinMaxBadge" class="hidden flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gradient-to-r from-blue-500/10 to-red-500/10 dark:from-blue-500/20 dark:to-red-500/20 border border-slate-200 dark:border-slate-600">
+            <div class="flex items-center gap-1" title="Nhiệt độ thấp nhất hôm nay">
+                <i data-lucide="thermometer-snowflake" class="w-3 h-3 text-blue-500"></i>
+                <span class="text-[10px] text-blue-500 font-medium">Min:</span>
+                <span id="temp-min-value" class="text-xs font-bold text-blue-600 dark:text-blue-400">--</span>
+            </div>
+            <span class="text-slate-300 dark:text-slate-600">|</span>
+            <div class="flex items-center gap-1" title="Nhiệt độ cao nhất hôm nay">
+                <i data-lucide="thermometer-sun" class="w-3 h-3 text-red-500"></i>
+                <span class="text-[10px] text-red-500 font-medium">Max:</span>
+                <span id="temp-max-value" class="text-xs font-bold text-red-600 dark:text-red-400">--</span>
+            </div>
+        </div>
+        <div id="lastUpdate" class="ml-auto flex items-center gap-1 text-slate-400">
+            <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+            <span class="text-[10px]" id="lastUpdateTime">--</span>
+        </div>
+    </div>
+</div>
+
+<!-- Real-Time Energy Flow -->
+<div id="realTimeFlow" class="hidden mb-4">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-3 sm:p-4 border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                Sơ Đồ Năng Lượng
+            </h2>
+            
+            <div class="flex items-center gap-2">
+                <!-- Pro/Basic Interface Toggle -->
+                <div class="flex items-center bg-slate-200 dark:bg-slate-700 rounded-lg p-0.5">
+                    <button id="basicViewBtn" onclick="switchEnergyFlowView('basic')" 
+                        class="px-2.5 py-1.5 text-xs font-medium rounded-md transition-all duration-200
+                               text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100"
+                        title="Giao diện Basic - Đơn giản">
+                        Basic
+                    </button>
+                    <button id="proViewBtn" onclick="switchEnergyFlowView('pro')" 
+                        class="px-2.5 py-1.5 text-xs font-medium rounded-md transition-all duration-200
+                               bg-teal-500 text-white shadow-sm"
+                        title="Giao diện Pro - Đầy đủ animation">
+                        Pro
+                    </button>
+                </div>
+                
+                <!-- Toggle button for animation mode (default: reduced) -->
+                <button id="toggleAnimationBtn" onclick="toggleAnimationMode()" 
+                    class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-200
+                           bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/50 dark:hover:bg-amber-800/50 
+                           text-amber-700 dark:text-amber-300 border border-amber-400 dark:border-amber-600"
+                    title="Bật/Tắt chế độ tăng hiệu ứng">
+                    <svg id="animationIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                    <span id="animationBtnText">Tăng hiệu ứng</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Solar Radiation Forecast - Hourly -->
+        <div id="solarForecastSection" class="mb-4">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">☀️</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Dự báo bức xạ mặt trời</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <!-- City Selector Dropdown -->
+                    <div class="relative">
+                        <select id="solar-city-select" onchange="changeSolarCity(this.value)"
+                            class="appearance-none bg-slate-100 dark:bg-slate-700 text-[10px] text-slate-600 dark:text-slate-300 
+                                   pl-5 pr-5 py-1 rounded-md border border-slate-200 dark:border-slate-600 
+                                   cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors
+                                   focus:outline-none focus:ring-1 focus:ring-amber-400">
+                            <optgroup label="🌴 Miền Nam">
+                                <option value="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>
+                                <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+                                <option value="Bình Dương">Bình Dương</option>
+                                <option value="Bình Phước">Bình Phước</option>
+                                <option value="Đồng Nai">Đồng Nai</option>
+                                <option value="Tây Ninh">Tây Ninh</option>
+                                <option value="Long An">Long An</option>
+                                <option value="Tiền Giang">Tiền Giang</option>
+                                <option value="Bến Tre">Bến Tre</option>
+                                <option value="Vĩnh Long">Vĩnh Long</option>
+                                <option value="Trà Vinh">Trà Vinh</option>
+                                <option value="Đồng Tháp">Đồng Tháp</option>
+                                <option value="An Giang">An Giang</option>
+                                <option value="Kiên Giang">Kiên Giang</option>
+                                <option value="Cần Thơ">Cần Thơ</option>
+                                <option value="Hậu Giang">Hậu Giang</option>
+                                <option value="Sóc Trăng">Sóc Trăng</option>
+                                <option value="Bạc Liêu">Bạc Liêu</option>
+                                <option value="Cà Mau">Cà Mau</option>
+                            </optgroup>
+                            <optgroup label="🏖️ Miền Trung">
+                                <option value="Đà Nẵng">Đà Nẵng</option>
+                                <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+                                <option value="Quảng Nam">Quảng Nam</option>
+                                <option value="Quảng Ngãi">Quảng Ngãi</option>
+                                <option value="Bình Định">Bình Định</option>
+                                <option value="Phú Yên">Phú Yên</option>
+                                <option value="Khánh Hòa">Khánh Hòa</option>
+                                <option value="Ninh Thuận">Ninh Thuận</option>
+                                <option value="Bình Thuận">Bình Thuận</option>
+                                <option value="Quảng Bình">Quảng Bình</option>
+                                <option value="Quảng Trị">Quảng Trị</option>
+                                <option value="Hà Tĩnh">Hà Tĩnh</option>
+                                <option value="Nghệ An">Nghệ An</option>
+                                <option value="Thanh Hóa">Thanh Hóa</option>
+                            </optgroup>
+                            <optgroup label="🏔️ Tây Nguyên">
+                                <option value="Kon Tum">Kon Tum</option>
+                                <option value="Gia Lai">Gia Lai</option>
+                                <option value="Đắk Lắk">Đắk Lắk</option>
+                                <option value="Đắk Nông">Đắk Nông</option>
+                                <option value="Lâm Đồng">Lâm Đồng</option>
+                            </optgroup>
+                            <optgroup label="❄️ Miền Bắc">
+                                <option value="Hà Nội">Hà Nội</option>
+                                <option value="Hải Phòng">Hải Phòng</option>
+                                <option value="Quảng Ninh">Quảng Ninh</option>
+                                <option value="Bắc Giang">Bắc Giang</option>
+                                <option value="Bắc Ninh">Bắc Ninh</option>
+                                <option value="Hải Dương">Hải Dương</option>
+                                <option value="Hưng Yên">Hưng Yên</option>
+                                <option value="Thái Bình">Thái Bình</option>
+                                <option value="Nam Định">Nam Định</option>
+                                <option value="Ninh Bình">Ninh Bình</option>
+                                <option value="Hà Nam">Hà Nam</option>
+                                <option value="Vĩnh Phúc">Vĩnh Phúc</option>
+                                <option value="Phú Thọ">Phú Thọ</option>
+                                <option value="Thái Nguyên">Thái Nguyên</option>
+                                <option value="Bắc Kạn">Bắc Kạn</option>
+                                <option value="Cao Bằng">Cao Bằng</option>
+                                <option value="Lạng Sơn">Lạng Sơn</option>
+                                <option value="Tuyên Quang">Tuyên Quang</option>
+                                <option value="Hà Giang">Hà Giang</option>
+                                <option value="Yên Bái">Yên Bái</option>
+                                <option value="Lào Cai">Lào Cai</option>
+                                <option value="Lai Châu">Lai Châu</option>
+                                <option value="Điện Biên">Điện Biên</option>
+                                <option value="Sơn La">Sơn La</option>
+                                <option value="Hòa Bình">Hòa Bình</option>
+                            </optgroup>
+                        </select>
+                        <span class="absolute left-1.5 top-1/2 -translate-y-1/2 text-[10px]">📍</span>
+                        <svg class="absolute right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500">|</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400" id="solar-update-time">--</span>
+                </div>
+            </div>
+            
+            <!-- Current Solar Info - Enhanced -->
+            <div class="mb-2 p-2 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                <!-- Row 1: Main solar info -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm" id="solar-current-icon">☀️</span>
+                        <span class="text-xs text-slate-600 dark:text-slate-400">Hiện tại:</span>
+                        <span class="text-sm font-bold text-amber-600 dark:text-amber-400" id="solar-current-value">-- W/m²</span>
+                    </div>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full" id="solar-level-dot"></span>
+                        <span class="text-xs font-medium" id="solar-level-text">--</span>
+                    </div>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs text-slate-500 dark:text-slate-400">🌡️</span>
+                        <span class="text-xs font-medium text-slate-600 dark:text-slate-300" id="solar-temp">--°C</span>
+                    </div>
+                    <div class="ml-auto flex items-center gap-1">
+                        <span class="text-xs text-slate-500 dark:text-slate-400">☁️</span>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400">Mây:</span>
+                        <span class="text-xs font-medium text-slate-600 dark:text-slate-300" id="solar-cloud">--%</span>
+                    </div>
+                </div>
+                <!-- Row 2: UV Index, Sunshine Duration, Precipitation -->
+                <div class="flex items-center gap-2 mt-1.5 pt-1.5 border-t border-amber-200/50 dark:border-amber-700/50 flex-wrap">
+                    <!-- UV Index -->
+                    <div class="flex items-center gap-1" title="Chỉ số UV - Mức độ tia cực tím">
+                        <span class="text-xs">🔆</span>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400">UV:</span>
+                        <span class="text-xs font-semibold" id="solar-uv-value">--</span>
+                        <span class="text-[9px] px-1 py-0.5 rounded" id="solar-uv-badge">--</span>
+                    </div>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <!-- Sunshine Duration (Forecast for today) -->
+                    <div class="flex items-center gap-1" title="Dự báo tổng thời gian nắng hôm nay">
+                        <span class="text-xs">⏱️</span>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400">Nắng (dự báo):</span>
+                        <span class="text-xs font-semibold text-orange-600 dark:text-orange-400" id="solar-sunshine-duration">--h</span>
+                    </div>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <!-- Precipitation Probability -->
+                    <div class="flex items-center gap-1" title="Xác suất mưa hiện tại">
+                        <span class="text-xs">🌧️</span>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400">Mưa:</span>
+                        <span class="text-xs font-semibold" id="solar-rain-prob">--%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hourly Forecast Scroll -->
+            <div class="relative">
+                <div id="solarHourlyScroll" class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
+                    <!-- Hourly items will be dynamically generated -->
+                    <div class="solar-hour-placeholder flex-shrink-0 w-12 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+                    <div class="solar-hour-placeholder flex-shrink-0 w-12 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+                    <div class="solar-hour-placeholder flex-shrink-0 w-12 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+                    <div class="solar-hour-placeholder flex-shrink-0 w-12 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+                    <div class="solar-hour-placeholder flex-shrink-0 w-12 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+                    <div class="solar-hour-placeholder flex-shrink-0 w-12 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Energy Flow Diagram - Pro View (default) -->
+        <div id="energyFlowPro" class="energy-flow-container max-w-[700px] mx-auto">
+            <!-- Row 1: Công suất PV + Lưới EVN -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                <!-- Công suất PV - Style amber/orange (cam vàng) -->
+                <div class="flow-item bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-xl p-2.5 sm:p-3 border border-amber-300 dark:border-amber-700">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="icon-glow-container icon-glow-pv relative" id="pv-icon-container">
+                            <div class="icon-glow-aura"></div>
+                            <!-- Animated Sun 1 (Main - always visible when power > 0) -->
+                            <picture class="sun-animated sun-main" id="sun-1">
+                                <source media="(max-width: 640px)" srcset="/icons/sun-mobile.png">
+                                <img src="/icons/sun.png" loading="lazy" alt="Sun" class="sun-icon">
+                            </picture>
+                            <!-- Animated Sun 2 (visible when power > 2000W) -->
+                            <picture class="sun-animated sun-extra sun-2" id="sun-2">
+                                <source media="(max-width: 640px)" srcset="/icons/sun-mobile.png">
+                                <img src="/icons/sun.png" loading="lazy" alt="Sun" class="sun-icon">
+                            </picture>
+                            <!-- Animated Sun 3 (visible when power > 3000W) -->
+                            <picture class="sun-animated sun-extra sun-3" id="sun-3">
+                                <source media="(max-width: 640px)" srcset="/icons/sun-mobile.png">
+                                <img src="/icons/sun.png" loading="lazy" alt="Sun" class="sun-icon">
+                            </picture>
+                            <!-- Solar Panel -->
+                            <picture class="solar-panel-img">
+                                <source media="(max-width: 640px)" srcset="/icons/solar-panel-mobile.png">
+                                <img src="/icons/solar-panel.png" loading="lazy" alt="Công suất PV" class="icon-glow-img">
+                            </picture>
+                        </div>
+                        <div class="text-xs font-semibold text-amber-700 dark:text-amber-300 mb-1">Công suất PV</div>
+                        <div class="text-lg sm:text-xl font-black text-amber-600 dark:text-amber-400" id="pv-power">--</div>
+                        <div class="text-[9px] sm:text-[10px] text-amber-500 dark:text-amber-400 mt-0.5 whitespace-nowrap" id="pv-desc">--</div>
+                    </div>
+                </div>
+                
+                <!-- Khoảng trống giữa -->
+                <div></div>
+                
+                <!-- Lưới EVN - Style màu vàng tia sét (amber/yellow) -->
+                <div class="flow-item bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-xl p-2.5 sm:p-3 border border-amber-300 dark:border-amber-700">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="icon-glow-container icon-glow-evn" id="evn-icon-container">
+                            <div class="icon-glow-aura"></div>
+                            <div class="evn-spark-container" id="evn-spark">
+                                <div class="evn-spark evn-spark-1"></div>
+                                <div class="evn-spark evn-spark-2"></div>
+                                <div class="evn-spark evn-spark-3"></div>
+                                <div class="evn-spark evn-spark-4"></div>
+                            </div>
+                            <picture>
+                                <source media="(max-width: 640px)" srcset="/icons/evn-grid-mobile.png">
+                                <img src="/icons/evn-grid.png" loading="lazy" alt="Lưới EVN" class="icon-glow-img">
+                            </picture>
+                        </div>
+                        <div class="text-xs font-semibold text-amber-700 dark:text-amber-300 mb-1">Lưới EVN</div>
+                        <div class="text-lg sm:text-xl font-black text-amber-600 dark:text-amber-400" id="grid-power">--</div>
+                        <div class="text-xs sm:text-sm font-medium text-amber-500 dark:text-amber-400 mt-0.5" id="grid-voltage">--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Đường kẻ + Animation: PV xuống + EVN xuống → Inverter -->
+            <div class="relative h-12 sm:h-14" id="flow-lines-top">
+                <div class="absolute left-[16.67%] top-0 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-[83.33%] top-0 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-[16.67%] right-[16.67%] top-1/2 h-0.5 border-t-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-1/2 top-1/2 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <!-- Animation dots -->
+                <!-- PV: <3000W=3 particles, >=3000W=5 particles -->
+                <div id="pv-flow-dot" class="energy-dot energy-dot-pv" style="display:none;"></div>
+                <div id="pv-flow-dot-2" class="energy-dot energy-dot-pv energy-dot-pv-2" style="display:none;"></div>
+                <div id="pv-flow-dot-3" class="energy-dot energy-dot-pv energy-dot-pv-3" style="display:none;"></div>
+                <div id="pv-flow-dot-4" class="energy-dot energy-dot-pv energy-dot-pv-4" style="display:none;"></div>
+                <div id="pv-flow-dot-5" class="energy-dot energy-dot-pv energy-dot-pv-5" style="display:none;"></div>
+                <!-- EVN: <3000W=3 particles, >=3000W=5 particles -->
+                <div id="evn-flow-dot" class="energy-dot energy-dot-evn" style="display:none;"></div>
+                <div id="evn-flow-dot-2" class="energy-dot energy-dot-evn energy-dot-evn-2" style="display:none;"></div>
+                <div id="evn-flow-dot-3" class="energy-dot energy-dot-evn energy-dot-evn-3" style="display:none;"></div>
+                <div id="evn-flow-dot-4" class="energy-dot energy-dot-evn energy-dot-evn-4" style="display:none;"></div>
+                <div id="evn-flow-dot-5" class="energy-dot energy-dot-evn energy-dot-evn-5" style="display:none;"></div>
+            </div>
+            
+            <!-- Row 2: Biến Tần -->
+            <div class="flex justify-center">
+                <div class="flow-item w-[140px] sm:w-[160px] bg-gradient-to-br from-slate-100 to-gray-100 dark:from-slate-700 dark:to-gray-700 rounded-xl p-3 border-2 border-slate-400 dark:border-slate-500">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="icon-glow-container icon-glow-inverter">
+                            <div class="icon-glow-aura"></div>
+                            <img src="/icons/inverter.png" loading="lazy" alt="Biến Tần" class="icon-glow-img">
+                        </div>
+                        <div class="text-sm font-bold text-slate-700 dark:text-slate-200">Biến Tần</div>
+                        <div class="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-full" id="inverter-type">--</div>
+                        <div class="text-sm font-semibold text-slate-600 dark:text-slate-300" id="device-temp">--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Đường kẻ + Animation: Inverter → 3 nhánh -->
+            <div class="relative h-12 sm:h-14" id="flow-lines-bottom">
+                <div class="absolute left-1/2 top-0 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-[16.67%] right-[16.67%] top-1/2 h-0.5 border-t-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-[16.67%] top-1/2 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-1/2 top-1/2 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <div class="absolute left-[83.33%] top-1/2 h-1/2 w-0.5 border-l-2 border-solid border-slate-400 dark:border-slate-500"></div>
+                <!-- Animation dots -->
+                <!-- Battery: 1000W=1, 2000W=2, 3000W=3 particles -->
+                <div id="battery-flow-dot" class="energy-dot energy-dot-battery" style="display:none;"></div>
+                <div id="battery-flow-dot-2" class="energy-dot energy-dot-battery energy-dot-battery-2" style="display:none;"></div>
+                <div id="battery-flow-dot-3" class="energy-dot energy-dot-battery energy-dot-battery-3" style="display:none;"></div>
+                <!-- Essential (Tải cổng load): 1000W=1, 2000W=2, 3000W=3 particles -->
+                <div id="essential-flow-dot" class="energy-dot energy-dot-essential" style="display:none;"></div>
+                <div id="essential-flow-dot-2" class="energy-dot energy-dot-essential energy-dot-essential-2" style="display:none;"></div>
+                <div id="essential-flow-dot-3" class="energy-dot energy-dot-essential energy-dot-essential-3" style="display:none;"></div>
+                <!-- Load (Tải hòa lưới): 1000W=1, 2000W=2, 3000W=3 particles -->
+                <div id="load-flow-dot" class="energy-dot energy-dot-load" style="display:none;"></div>
+                <div id="load-flow-dot-2" class="energy-dot energy-dot-load energy-dot-load-2" style="display:none;"></div>
+                <div id="load-flow-dot-3" class="energy-dot energy-dot-load energy-dot-load-3" style="display:none;"></div>
+            </div>
+            
+            <!-- Row 3: Pin, Tải cổng load, Tải hòa lưới -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                <!-- Pin lưu trữ - Style giống Tải hòa lưới (emerald) -->
+                <div class="flow-item bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/30 rounded-xl p-2.5 sm:p-3 border border-emerald-300 dark:border-emerald-700">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="icon-glow-container icon-glow-battery mb-1">
+                            <div class="icon-glow-aura"></div>
+                            <div class="battery-icon-wrapper">
+                                <div class="w-12 h-7 sm:w-14 sm:h-8 rounded-md border-2 border-emerald-500 dark:border-emerald-600 relative overflow-hidden bg-white dark:bg-slate-700">
+                                    <div id="battery-fill" class="absolute left-0 top-0 bottom-0 bg-emerald-500 transition-all duration-500" style="width: 0%"></div>
+                                    <span id="battery-percent-icon" class="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-black text-slate-700 dark:text-white z-10">--%</span>
+                                </div>
+                                <div class="w-1 h-3 bg-emerald-500 dark:bg-emerald-600 rounded-r-sm"></div>
+                            </div>
+                        </div>
+                        <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-300 mb-1">Pin lưu trữ</div>
+                        <div id="battery-power" class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">--</div>
+                        <div id="battery-status-text" class="text-xs sm:text-sm font-semibold text-emerald-500 dark:text-emerald-400 mt-0.5 truncate max-w-full">--</div>
+                    </div>
+                </div>
+                
+                <!-- Tải cổng load -->
+                <div class="flow-item bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 rounded-xl p-2.5 sm:p-3 border border-cyan-300 dark:border-cyan-700">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="icon-glow-container icon-glow-essential">
+                            <div class="icon-glow-aura"></div>
+                            <img src="/icons/backup.png" loading="lazy" alt="Tải cổng load" class="icon-glow-img">
+                        </div>
+                        <div class="text-xs font-semibold text-cyan-700 dark:text-cyan-300 mb-1">Tải cổng load</div>
+                        <div class="text-base sm:text-lg font-black text-cyan-600 dark:text-cyan-400" id="essential-power">--</div>
+                    </div>
+                </div>
+                
+                <!-- Tải hòa lưới -->
+                <div class="flow-item bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/30 rounded-xl p-2.5 sm:p-3 border border-emerald-300 dark:border-emerald-700">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="icon-glow-container icon-glow-load">
+                            <div class="icon-glow-aura"></div>
+                            <picture>
+                                <source media="(max-width: 640px)" srcset="/icons/grid-export-mobile.png">
+                                <img src="/icons/grid-export.png" loading="lazy" alt="Tải hòa lưới" class="icon-glow-img">
+                            </picture>
+                        </div>
+                        <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-300 mb-1">Tải hòa lưới</div>
+                        <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400" id="load-power">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Energy Flow Diagram - Basic View (hidden by default) -->
+        <div id="energyFlowBasic" class="hidden">
+            <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                <!-- Row 1: PV, Inverter, Grid -->
+                <div class="flow-item bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl p-2.5 sm:p-3 border border-amber-200 dark:border-amber-800">
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 mb-1.5 flex items-center justify-center">
+                            <img src="/icons/solar-panel.png" alt="Tấm Pin" class="w-full h-full object-contain drop-shadow-md">
+                        </div>
+                        <div class="text-xs font-semibold text-amber-700 dark:text-amber-300 text-center">Tấm Pin</div>
+                        <div class="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400" id="pv-power-basic">--</div>
+                        <div class="text-[9px] sm:text-[10px] text-amber-500 dark:text-amber-400 mt-0.5 whitespace-nowrap" id="pv-desc-basic">--</div>
+                    </div>
+                </div>
+                
+                <div class="flow-item bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-2.5 sm:p-3 border border-cyan-200 dark:border-cyan-800">
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 mb-1.5 flex items-center justify-center">
+                            <img src="/icons/inverter.png" loading="lazy" alt="Inverter" class="w-full h-full object-contain drop-shadow-md">
+                        </div>
+                        <div class="text-xs sm:text-sm font-bold text-cyan-700 dark:text-cyan-300 truncate max-w-full" id="inverter-type-basic">Lumentree Inverter</div>
+                        <div class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400" id="device-temp-basic">--</div>
+                    </div>
+                </div>
+                
+                <div class="flow-item bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-xl p-2.5 sm:p-3 border border-amber-300 dark:border-amber-700">
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 mb-1.5 flex items-center justify-center relative" id="evn-icon-container-basic">
+                            <div class="evn-spark-container" id="evn-spark-basic">
+                                <div class="evn-spark evn-spark-1"></div>
+                                <div class="evn-spark evn-spark-2"></div>
+                                <div class="evn-spark evn-spark-3"></div>
+                                <div class="evn-spark evn-spark-4"></div>
+                            </div>
+                            <picture>
+                                <source media="(max-width: 640px)" srcset="/icons/evn-grid-mobile.png">
+                                <img src="/icons/evn-grid.png" loading="lazy" alt="Lưới EVN" class="w-full h-full object-contain drop-shadow-md">
+                            </picture>
+                        </div>
+                        <div class="text-xs font-semibold text-amber-700 dark:text-amber-300 text-center">Lưới EVN</div>
+                        <div class="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400" id="grid-power-basic">--</div>
+                        <div class="text-[10px] text-amber-500 dark:text-amber-400" id="grid-voltage-basic">--</div>
+                    </div>
+                </div>
+                
+                <!-- Row 2: Battery, Essential, Load -->
+                <div class="flow-item bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-800 dark:to-gray-800 rounded-xl p-2.5 sm:p-3 border border-slate-200 dark:border-slate-700">
+                    <div class="flex flex-col items-center">
+                        <div class="w-14 h-8 sm:w-16 sm:h-9 mb-1.5 flex items-center justify-center relative">
+                            <div class="w-12 h-7 sm:w-14 sm:h-8 rounded-md border-2 border-slate-400 dark:border-slate-500 relative overflow-hidden bg-white dark:bg-slate-700">
+                                <div id="battery-fill-basic" class="absolute left-0 top-0 bottom-0 bg-green-500 transition-all duration-500" style="width: 0%"></div>
+                                <span id="battery-percent-basic" class="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-black text-slate-700 dark:text-white z-10">--%</span>
+                            </div>
+                            <div class="w-1 h-3 bg-slate-400 dark:bg-slate-500 rounded-r-sm"></div>
+                        </div>
+                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-300 text-center">Pin</div>
+                        <div id="battery-power-basic" class="text-base sm:text-lg font-black text-slate-700 dark:text-slate-300">--</div>
+                        <div id="battery-status-basic" class="text-xs font-medium truncate max-w-full text-slate-500 dark:text-slate-400">--</div>
+                    </div>
+                </div>
+                
+                <div class="flow-item bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl p-2.5 sm:p-3 border border-indigo-200 dark:border-indigo-800">
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 mb-1.5 flex items-center justify-center">
+                            <img src="/icons/backup.png" loading="lazy" alt="Tải cổng load" class="w-full h-full object-contain drop-shadow-md">
+                        </div>
+                        <div class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 text-center">Tải cổng load</div>
+                        <div class="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400" id="essential-power-basic">--</div>
+                    </div>
+                </div>
+                
+                <div class="flow-item bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl p-2.5 sm:p-3 border border-emerald-200 dark:border-emerald-800">
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 mb-1.5 flex items-center justify-center">
+                            <picture>
+                                <source media="(max-width: 640px)" srcset="/icons/grid-export-mobile.png">
+                                <img src="/icons/grid-export.png" loading="lazy" alt="Tải hòa lưới" class="w-full h-full object-contain drop-shadow-md">
+                            </picture>
+                        </div>
+                        <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-300 text-center">Tải hòa lưới</div>
+                        <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400" id="load-power-basic">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Battery Cell Section -->
+<div id="batteryCellSection" class="hidden mb-4">
+    <div class="bg-white dark:bg-slate-800 rounded-xl border-2 border-teal-200 dark:border-teal-800 shadow-lg overflow-hidden">
+        <div id="cellSectionHeader" class="p-3 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/30 dark:to-cyan-900/30 border-b border-teal-200 dark:border-teal-800 cursor-pointer hover:bg-teal-100/50 dark:hover:bg-teal-900/40 transition-colors">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg">
+                        <i data-lucide="battery" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800 dark:text-white">Điện Áp Cell Pin</h2>
+                        <p class="text-[10px] text-teal-600 dark:text-teal-400 font-medium">Giám sát từng cell</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="cellCountBadge" class="bg-teal-500 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">-- cell</span>
+                    <span id="cellUpdateTime" class="text-[9px] text-slate-500 dark:text-slate-400">--:--:--</span>
+                    <button id="reloadCellBtn" class="p-1.5 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors" title="Tải lại dữ liệu cell">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <div class="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-700 rounded-lg shadow">
+                        <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300" id="toggleText">Ẩn</span>
+                        <i data-lucide="chevron-up" class="w-4 h-4 text-teal-500 transition-transform" id="toggleIcon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cellSectionContent" class="p-3">
+            <div class="grid grid-cols-5 gap-2 mb-3">
+                <div class="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 rounded-lg p-2 text-center border border-blue-200 dark:border-blue-700">
+                    <div class="text-[8px] font-bold text-blue-600 dark:text-blue-400 uppercase">Điện Áp Pin</div>
+                    <div class="text-sm sm:text-lg font-black text-blue-700 dark:text-blue-300" id="batteryVoltageDisplay">--</div>
+                </div>
+                <div class="bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/40 dark:to-cyan-900/40 rounded-lg p-2 text-center border border-teal-200 dark:border-teal-700">
+                    <div class="text-[8px] font-bold text-teal-600 dark:text-teal-400 uppercase">Trung Bình</div>
+                    <div class="text-sm sm:text-lg font-black text-teal-700 dark:text-teal-300" id="cellAvg">--</div>
+                </div>
+                <div class="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 rounded-lg p-2 text-center border border-blue-300 dark:border-blue-600">
+                    <div class="text-[8px] font-bold text-blue-600 dark:text-blue-400 uppercase">Cao Nhất Hiện Tại</div>
+                    <div class="text-sm sm:text-lg font-black text-blue-700 dark:text-blue-300" id="cellMax">--</div>
+                </div>
+                <div class="bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900/40 dark:to-yellow-900/40 rounded-lg p-2 text-center border border-amber-200 dark:border-amber-700">
+                    <div class="text-[8px] font-bold text-amber-600 dark:text-amber-400 uppercase">Thấp Nhất Hiện Tại</div>
+                    <div class="text-sm sm:text-lg font-black text-amber-700 dark:text-amber-300" id="cellMin">--</div>
+                </div>
+                <div class="bg-gradient-to-br from-rose-100 to-red-100 dark:from-rose-900/40 dark:to-red-900/40 rounded-lg p-2 text-center border border-rose-200 dark:border-rose-700">
+                    <div class="text-[8px] font-bold text-rose-600 dark:text-rose-400 uppercase">Độ Lệch</div>
+                    <div class="text-sm sm:text-lg font-black" id="cellDiffValue">--</div>
+                </div>
+            </div>
+            
+            <div class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
+                <div id="cellGrid">
+                    <div class="cell-placeholder bg-slate-100 dark:bg-slate-800 rounded-lg h-16 flex items-center justify-center">
+                        <span class="text-slate-400 text-xs">Đang chờ dữ liệu cell...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-3 mt-3">
+                <div class="flex items-center gap-1.5">
+                    <div class="w-4 h-4 bg-gradient-to-br from-green-400 to-green-600 rounded"></div>
+                    <span class="text-slate-600 dark:text-slate-400 font-medium text-[10px]">Tốt (&lt;0.020V)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <div class="w-4 h-4 bg-gradient-to-br from-amber-400 to-amber-600 rounded"></div>
+                    <span class="text-slate-600 dark:text-slate-400 font-medium text-[10px]">Khá (0.020V - 0.050V)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <div class="w-4 h-4 bg-gradient-to-br from-red-400 to-red-600 rounded"></div>
+                    <span class="text-slate-600 dark:text-slate-400 font-medium text-[10px]">Cảnh báo (&gt;0.050V)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Stats Cards - 3 Columns on both Mobile and PC -->
+<div id="summaryStats" class="hidden mb-4">
+    <div class="grid grid-cols-3 gap-1.5 sm:gap-3">
+        <!-- Card 1: Sản Lượng PV + Tiêu Thụ -->
+        <div id="pv-load-card" class="cursor-pointer bg-gradient-to-br from-teal-500 to-teal-600 dark:from-slate-700 dark:to-slate-900 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-lg hover:scale-[1.02] transition-all">
+            <div class="flex items-center gap-1 sm:gap-2 mb-1.5 sm:mb-2">
+                <div class="w-6 h-6 sm:w-8 sm:h-8 bg-white/20 rounded-md sm:rounded-lg flex items-center justify-center">
+                    <i data-lucide="sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white"></i>
+                </div>
+                <div class="text-white/90 text-xs sm:text-sm font-bold">Năng Lượng</div>
+            </div>
+            <div class="space-y-1.5 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3">
+                <div class="bg-white/10 rounded-md sm:rounded-lg p-2 sm:p-2 text-center">
+                    <div class="text-white/70 text-[10px] sm:text-xs font-medium">Sản Lượng PV</div>
+                    <div id="pv-total" class="text-sm sm:text-lg font-black text-white">--</div>
+                </div>
+                <div class="bg-white/10 rounded-md sm:rounded-lg p-2 sm:p-2 text-center">
+                    <div class="text-white/70 text-[10px] sm:text-xs font-medium">Tiêu Thụ</div>
+                    <div id="load-total" class="text-sm sm:text-lg font-black text-white">--</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 2: Nạp Pin + Xả Pin -->
+        <div id="bat-card" class="cursor-pointer bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-slate-700 dark:to-slate-900 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-lg hover:scale-[1.02] transition-all">
+            <div class="flex items-center gap-1 sm:gap-2 mb-1.5 sm:mb-2">
+                <div class="w-6 h-6 sm:w-8 sm:h-8 bg-white/20 rounded-md sm:rounded-lg flex items-center justify-center">
+                    <i data-lucide="battery-charging" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white"></i>
+                </div>
+                <div class="text-white/90 text-xs sm:text-sm font-bold">Pin Lưu Trữ</div>
+            </div>
+            <div class="space-y-1.5 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3">
+                <div class="bg-white/10 rounded-md sm:rounded-lg p-2 sm:p-2 text-center">
+                    <div class="text-white/70 text-[10px] sm:text-xs font-medium">Nạp Pin</div>
+                    <div id="bat-charge" class="text-sm sm:text-lg font-black text-emerald-300">--</div>
+                </div>
+                <div class="bg-white/10 rounded-md sm:rounded-lg p-2 sm:p-2 text-center">
+                    <div class="text-white/70 text-[10px] sm:text-xs font-medium">Xả Pin</div>
+                    <div id="bat-discharge" class="text-sm sm:text-lg font-black text-rose-300">--</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 3: Điện EVN + Điện Dự Phòng -->
+        <div id="grid-essential-card" class="cursor-pointer bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-slate-700 dark:to-slate-900 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-lg hover:scale-[1.02] transition-all">
+            <div class="flex items-center gap-1 sm:gap-2 mb-1.5 sm:mb-2">
+                <div class="w-6 h-6 sm:w-8 sm:h-8 bg-white/20 rounded-md sm:rounded-lg flex items-center justify-center">
+                    <i data-lucide="zap" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white"></i>
+                </div>
+                <div class="text-white/90 text-xs sm:text-sm font-bold">Nguồn Điện</div>
+            </div>
+            <div class="space-y-1.5 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3">
+                <div class="bg-white/10 rounded-md sm:rounded-lg p-2 sm:p-2 text-center">
+                    <div class="text-white/70 text-[10px] sm:text-xs font-medium">Xài Điện EVN</div>
+                    <div id="grid-total" class="text-sm sm:text-lg font-black text-amber-300">--</div>
+                </div>
+                <div class="bg-white/10 rounded-md sm:rounded-lg p-2 sm:p-2 text-center">
+                    <div class="text-white/70 text-[10px] sm:text-xs font-medium">Điện Dự Phòng</div>
+                    <div id="essential-total" class="text-sm sm:text-lg font-black text-cyan-300">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div id="chart-section" class="hidden space-y-4">
+    <!-- Battery SOC Chart V5.0 - DATA FROM soc.applike098.workers.dev -->
+    <div id="soc-section" class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-4 sm:p-5 border-l-4 border-teal-500">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm sm:text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <i data-lucide="battery-full" class="w-5 h-5 text-teal-500"></i>
+                Phần Trăm Pin (SOC)
+            </h2>
+            <div class="flex items-center gap-2">
+                <span id="soc-last-update" class="text-[9px] text-slate-400 dark:text-slate-500"></span>
+                <span class="flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Auto-reload
+                </span>
+            </div>
+        </div>
+        
+        <!-- Big SOC Display + Stats Row -->
+        <div class="flex items-center mb-4 gap-4">
+            <!-- Big SOC Value -->
+            <div class="flex items-center gap-3">
+                <div class="text-4xl sm:text-5xl font-black text-teal-600 dark:text-teal-400" id="soc-big-value">--%</div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
+                        MAX: <span id="soc-max">--%</span>
+                    </span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400">
+                        MIN: <span id="soc-min">--%</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chart Container with External Tooltip -->
+        <div class="chart-container relative" style="height: 200px;">
+            <canvas id="socChart"></canvas>
+            <!-- External HTML Tooltip (zoom-proof) - Simplified: only time and SOC -->
+            <div id="soc-tooltip" class="hidden absolute z-50 bg-slate-900/95 text-white text-xs rounded-lg shadow-xl p-2.5 pointer-events-none backdrop-blur-sm border border-slate-700">
+                <div id="soc-tooltip-time" class="text-slate-300 text-xs font-medium"></div>
+                <div id="soc-tooltip-soc" class="text-xl font-black text-teal-400"></div>
+            </div>
+        </div>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 text-center font-medium">
+            Auto-reload mỗi 5 phút
+        </p>
+    </div>
+
+    <!-- Combined Energy Chart - ENHANCED V2.0 -->
+    <div id="energy-chart-section" class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-4 sm:p-5 border-l-4 border-indigo-500">
+        <!-- Header with title and time info -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm sm:text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 text-indigo-500"></i>
+                Biểu Đồ Năng Lượng Tổng Hợp
+            </h2>
+            <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+                <span id="energy-chart-date"></span>
+            </div>
+        </div>
+        
+        <!-- Công Suất Cao Nhất - 3 khung gộp đôi, 3 hàng ngang -->
+        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 mb-4 items-stretch">
+            <!-- Khung 1: PV + EVN (Nguồn cao nhất) -->
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-lg sm:rounded-xl p-2 sm:p-3 border border-slate-200 dark:border-slate-600 flex flex-col">
+                <div class="flex items-center justify-center gap-1 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-600 min-h-[28px]">
+                    <i data-lucide="arrow-down-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 flex-shrink-0"></i>
+                    <span class="text-[10px] sm:text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide text-center">Nguồn Cao Nhất</span>
+                </div>
+                <!-- Mobile: 2 hàng dọc, PC: 2 cột ngang -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 flex-1">
+                    <!-- PV -->
+                    <div class="bg-amber-500/10 dark:bg-amber-500/20 rounded-lg p-2 text-center flex flex-col justify-center">
+                        <div class="flex items-center justify-center gap-1 mb-1">
+                            <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500"></i>
+                            <span class="text-[11px] sm:text-xs font-bold text-amber-600 dark:text-amber-400">PV</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-black text-amber-600 dark:text-amber-300" id="chart-pv-peak">--</div>
+                        <div class="text-[11px] sm:text-xs font-semibold text-amber-500 dark:text-amber-400" id="chart-pv-time">--:--</div>
+                    </div>
+                    <!-- EVN -->
+                    <div class="bg-purple-500/10 dark:bg-purple-500/20 rounded-lg p-2 text-center flex flex-col justify-center">
+                        <div class="flex items-center justify-center gap-1 mb-1">
+                            <i data-lucide="plug" class="w-3.5 h-3.5 text-purple-500"></i>
+                            <span class="text-[11px] sm:text-xs font-bold text-purple-600 dark:text-purple-400">EVN</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-black text-purple-600 dark:text-purple-300" id="chart-grid-peak">--</div>
+                        <div class="text-[11px] sm:text-xs font-semibold text-purple-500 dark:text-purple-400" id="chart-grid-time">--:--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Khung 2: Sạc + Xả (Pin cao nhất) -->
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-lg sm:rounded-xl p-2 sm:p-3 border border-slate-200 dark:border-slate-600 flex flex-col">
+                <div class="flex items-center justify-center gap-1 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-600 min-h-[28px]">
+                    <i data-lucide="battery" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 flex-shrink-0"></i>
+                    <span class="text-[10px] sm:text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide text-center">Pin Cao Nhất</span>
+                </div>
+                <!-- Mobile: 2 hàng dọc, PC: 2 cột ngang -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 flex-1">
+                    <!-- Sạc -->
+                    <div class="bg-green-500/10 dark:bg-green-500/20 rounded-lg p-2 text-center flex flex-col justify-center">
+                        <div class="flex items-center justify-center gap-1 mb-1">
+                            <i data-lucide="battery-charging" class="w-3.5 h-3.5 text-green-500"></i>
+                            <span class="text-[11px] sm:text-xs font-bold text-green-600 dark:text-green-400">Sạc</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-black text-green-600 dark:text-green-300" id="chart-charge-peak">--</div>
+                        <div class="text-[11px] sm:text-xs font-semibold text-green-500 dark:text-green-400" id="chart-charge-time">--:--</div>
+                    </div>
+                    <!-- Xả -->
+                    <div class="bg-red-500/10 dark:bg-red-500/20 rounded-lg p-2 text-center flex flex-col justify-center">
+                        <div class="flex items-center justify-center gap-1 mb-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-red-500"></i>
+                            <span class="text-[11px] sm:text-xs font-bold text-red-600 dark:text-red-400">Xả</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-black text-red-600 dark:text-red-300" id="chart-discharge-peak">--</div>
+                        <div class="text-[11px] sm:text-xs font-semibold text-red-500 dark:text-red-400" id="chart-discharge-time">--:--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Khung 3: Tải + Dự phòng (Tiêu thụ cao nhất) -->
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-lg sm:rounded-xl p-2 sm:p-3 border border-slate-200 dark:border-slate-600 flex flex-col">
+                <div class="flex items-center justify-center gap-1 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-600 min-h-[28px]">
+                    <i data-lucide="arrow-up-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 flex-shrink-0"></i>
+                    <span class="text-[10px] sm:text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide text-center">Tiêu Thụ Cao Nhất</span>
+                </div>
+                <!-- Mobile: 2 hàng dọc, PC: 2 cột ngang -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 flex-1">
+                    <!-- Tải -->
+                    <div class="bg-blue-500/10 dark:bg-blue-500/20 rounded-lg p-2 text-center flex flex-col justify-center">
+                        <div class="flex items-center justify-center gap-1 mb-1">
+                            <i data-lucide="home" class="w-3.5 h-3.5 text-blue-500"></i>
+                            <span class="text-[11px] sm:text-xs font-bold text-blue-600 dark:text-blue-400">Tải</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-black text-blue-600 dark:text-blue-300" id="chart-load-peak">--</div>
+                        <div class="text-[11px] sm:text-xs font-semibold text-blue-500 dark:text-blue-400" id="chart-load-time">--:--</div>
+                    </div>
+                    <!-- Dự phòng -->
+                    <div class="bg-cyan-500/10 dark:bg-cyan-500/20 rounded-lg p-2 text-center flex flex-col justify-center">
+                        <div class="flex items-center justify-center gap-1 mb-1">
+                            <i data-lucide="shield" class="w-3.5 h-3.5 text-cyan-500"></i>
+                            <span class="text-[11px] sm:text-xs font-bold text-cyan-600 dark:text-cyan-400">Dự phòng</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-black text-cyan-600 dark:text-cyan-300" id="chart-essential-peak">--</div>
+                        <div class="text-[11px] sm:text-xs font-semibold text-cyan-500 dark:text-cyan-400" id="chart-essential-time">--:--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interactive Legend toggle buttons -->
+        <div class="flex flex-wrap gap-1.5 mb-3" id="chartLegendToggle">
+            <button onclick="toggleDataset(0)" class="legend-btn active group px-2.5 py-1.5 text-xs rounded-lg border-2 border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all shadow-sm" data-color="amber" title="Sản Lượng PV">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50"></span>
+                    <span class="font-semibold text-amber-700 dark:text-amber-300">PV</span>
+                </span>
+            </button>
+            <button onclick="toggleDataset(1)" class="legend-btn active group px-2.5 py-1.5 text-xs rounded-lg border-2 border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 transition-all shadow-sm" data-color="green" title="Sạc Pin">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50"></span>
+                    <span class="font-semibold text-green-700 dark:text-green-300">Sạc</span>
+                </span>
+            </button>
+            <button onclick="toggleDataset(2)" class="legend-btn active group px-2.5 py-1.5 text-xs rounded-lg border-2 border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition-all shadow-sm" data-color="red" title="Xả Pin">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span>
+                    <span class="font-semibold text-red-700 dark:text-red-300">Xả</span>
+                </span>
+            </button>
+            <button onclick="toggleDataset(3)" class="legend-btn active group px-2.5 py-1.5 text-xs rounded-lg border-2 border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all shadow-sm" data-color="blue" title="Điện Tiêu Thụ">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></span>
+                    <span class="font-semibold text-blue-700 dark:text-blue-300">Tải</span>
+                </span>
+            </button>
+            <button onclick="toggleDataset(4)" class="legend-btn active group px-2.5 py-1.5 text-xs rounded-lg border-2 border-purple-300 dark:border-purple-600 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-all shadow-sm" data-color="purple" title="Điện Lưới EVN">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-sm shadow-purple-500/50"></span>
+                    <span class="font-semibold text-purple-700 dark:text-purple-300">EVN</span>
+                </span>
+            </button>
+            <button onclick="toggleDataset(5)" class="legend-btn active group px-2.5 py-1.5 text-xs rounded-lg border-2 border-cyan-300 dark:border-cyan-600 bg-cyan-50 dark:bg-cyan-900/30 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 transition-all shadow-sm" data-color="cyan" title="Điện Dự Phòng">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-500 shadow-sm shadow-cyan-500/50"></span>
+                    <span class="font-semibold text-cyan-700 dark:text-cyan-300">Dự phòng</span>
+                </span>
+            </button>
+        </div>
+        
+        <!-- Chart Container -->
+        <div class="chart-container relative bg-slate-50/50 dark:bg-slate-900/30 rounded-xl p-2" style="height: 45vh; min-height: 280px;">
+            <canvas id="combinedEnergyChart"></canvas>
+            <!-- External Tooltip for Energy Chart -->
+            <div id="energy-tooltip" class="hidden absolute z-50 bg-slate-900/95 text-white text-xs rounded-xl shadow-2xl p-3 pointer-events-none min-w-[180px] backdrop-blur-sm border border-slate-700">
+                <div id="energy-tooltip-time" class="text-slate-300 mb-2 font-medium border-b border-slate-700 pb-2"></div>
+                <div id="energy-tooltip-content" class="space-y-1.5"></div>
+            </div>
+        </div>
+        
+        <!-- Chart Footer Info -->
+        <div class="flex items-center justify-center mt-3 text-[10px] text-slate-400 dark:text-slate-500">
+            <span>Dữ liệu mỗi 5 phút trong ngày</span>
+        </div>
+    </div>
+</div>
+
+<!-- Loading indicator -->
+<div id="loading" class="hidden flex justify-center items-center p-8">
+    <div class="flex flex-col items-center gap-3">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-teal-500 border-t-transparent"></div>
+        <span class="text-sm text-slate-500">Đang tải dữ liệu...</span>
+    </div>
+</div>
+
+<!-- Error message -->
+<div id="errorMessage" class="hidden bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl mb-4">
+    <div class="flex items-center gap-2">
+        <i data-lucide="alert-circle" class="w-5 h-5"></i>
+        <span id="errorText" class="font-medium">Đã xảy ra lỗi khi tải dữ liệu.</span>
+    </div>
+</div>
+
+
+    </main>
+    
+    <!-- Floating Action Button - Calculator -->
+    <button b-iwpun16f09 onclick="openCalculatorModal()" 
+            class="fab gradient-brand shadow-brand text-white sm:hidden"
+            title="Tính Tiết Kiệm">
+        <i b-iwpun16f09 data-lucide="calculator" class="w-6 h-6"></i>
+    </button>
+    
+    <!-- Calculator Modal -->
+    <div b-iwpun16f09 id="calculatorModal" class="modal-overlay">
+        <div b-iwpun16f09 class="modal-content">
+            <button b-iwpun16f09 onclick="closeCalculatorModal()" 
+                    class="absolute top-4 right-4 z-10 w-10 h-10 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full flex items-center justify-center transition-all">
+                <i b-iwpun16f09 data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <iframe b-iwpun16f09 id="calculatorIframe" src="" class="w-full h-full border-0"></iframe>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        
+        // Theme management
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme or system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        });
+        
+        // Calculator Modal functions
+        function openCalculatorModal() {
+            const modal = document.getElementById('calculatorModal');
+            const iframe = document.getElementById('calculatorIframe');
+            
+            // Pass deviceId if available
+            const urlParams = new URLSearchParams(window.location.search);
+            const deviceId = urlParams.get('deviceId') || '';
+            
+            iframe.src = '/calculator.html' + (deviceId ? '?deviceId=' + deviceId : '');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeCalculatorModal() {
+            const modal = document.getElementById('calculatorModal');
+            const iframe = document.getElementById('calculatorIframe');
+            
+            modal.classList.remove('active');
+            iframe.src = '';
+            document.body.style.overflow = '';
+        }
+        
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCalculatorModal();
+            }
+        });
+        
+        // Close modal on overlay click
+        document.getElementById('calculatorModal').addEventListener('click', (e) => {
+            if (e.target.id === 'calculatorModal') {
+                closeCalculatorModal();
+            }
+        });
+        
+        // ========================================
+        // HEADER SCROLL HIDE - Always hide when scrolled
+        // ========================================
+        (function() {
+            const header = document.getElementById('mainHeader');
+            
+            function handleHeaderScroll() {
+                if (header) {
+                    if (window.scrollY > 50) {
+                        // Scrolled down - hide header
+                        header.classList.add('header-hidden');
+                    } else {
+                        // At top - show header
+                        header.classList.remove('header-hidden');
+                    }
+                }
+            }
+            
+            window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+        })();
+    </script>
+    
+    
+    <!-- CSS first for fast rendering -->
+    <link href="/css/index.css?v=20017" rel="stylesheet" />
+    
+    <!-- SignalR Client Library - defer -->
+    <script src="https://unpkg.com/@@microsoft/signalr@latest" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="/js/index.js?v=13146" defer></script>
+
+</body>
+</html>
