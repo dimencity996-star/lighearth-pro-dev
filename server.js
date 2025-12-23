@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const ROOT_DIR = path.join(__dirname, 'LumenTreeInfo.API/wwwroot');
 
 const MIME_TYPES = {
@@ -25,9 +25,9 @@ const MIME_TYPES = {
 const server = http.createServer((req, res) => {
     let url = req.url.split('?')[0];
     
-    // Default to dashboard.html for root
+    // Default to calculator.html for root (standalone page)
     if (url === '/' || url === '') {
-        url = '/dashboard.html';
+        url = '/calculator.html';
     }
     
     const filePath = path.join(ROOT_DIR, url);
@@ -44,8 +44,8 @@ const server = http.createServer((req, res) => {
     fs.readFile(filePath, (err, data) => {
         if (err) {
             if (err.code === 'ENOENT') {
-                // File not found - try index.html
-                fs.readFile(path.join(ROOT_DIR, 'dashboard.html'), (err2, data2) => {
+                // File not found - try calculator.html as fallback
+                fs.readFile(path.join(ROOT_DIR, 'calculator.html'), (err2, data2) => {
                     if (err2) {
                         res.writeHead(404, { 'Content-Type': 'text/plain' });
                         res.end('Not Found');
@@ -73,14 +73,12 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log(`\n🌟 Solar Dashboard Server running!`);
+    console.log(`\n🌟 LightEarth Solar Dashboard Server running!`);
     console.log(`📍 Local: http://localhost:${PORT}`);
     console.log(`📍 Network: http://0.0.0.0:${PORT}`);
     console.log(`\n📄 Pages:`);
-    console.log(`   / → dashboard.html (Auto-refresh 2s)`);
-    console.log(`   /dashboard.html`);
-    console.log(`   /index.html`);
-    console.log(`\n✅ Real-time Energy Flow: Auto-refresh every 2 seconds`);
-    console.log(`✅ Cell Voltage: Độ Lệch converted to V`);
-    console.log(`\n🔗 Ready for testing!\n`);
+    console.log(`   / → calculator.html (Solar Calculator)`);
+    console.log(`   /calculator.html - Tính toán tiết kiệm điện`);
+    console.log(`   /index.html - Dashboard chính`);
+    console.log(`\n🔗 Ready for access!\n`);
 });
